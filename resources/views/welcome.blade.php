@@ -5,91 +5,194 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Movie Review</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <!-- Loading third party fonts -->
+        <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+        <link href="{{ asset ('/fonts/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+        <!-- Loading main css file -->
+        <link rel="stylesheet" href="{{ asset ('/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset ('/css/mycss.css') }}">
+        
+        <!--[if lt IE 9]>
+        <script src="js/ie-support/html5.js"></script>
+        <script src="js/ie-support/respond.js"></script>
+        <![endif]-->
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
     </head>
+
+
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @if (Auth::check())
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ url('/login') }}">Login</a>
-                        <a href="{{ url('/register') }}">Register</a>
-                    @endif
-                </div>
-            @endif
+            
+        <div id="site-content">
+            <header class="site-header">
+                <div class="container">
+                    <a href="index.html" id="branding">
+                        <img src="{{ asset ('/images/logo.png') }}" alt="" class="logo">
+                        <div class="logo-copy">
+                            <h1 class="site-title">ubiW</h1>
+                            <small class="site-description">Mengubah Tantangan menjadi Peluang</small>
+                        </div>
+                    </a> <!-- #branding -->
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
+                    <div class="main-navigation">
+                        <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
+                        <ul class="menu">
+                            <li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
+                            <li class="menu-item"><a href="about.html">About</a></li>
+                            <li class="menu-item"><a href="review.html">Movie reviews</a></li>
+                            <li class="menu-item"><a href="joinus.html">Join us</a></li>
+                            <li class="menu-item"><a href="contact.html">Contact</a></li>
+                        </ul> <!-- .menu -->
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                        <form action="#" class="search-form">
+                            <input type="text" placeholder="Search...">
+                            <button><i class="fa fa-search"></i></button>
+                        </form>
+                    </div> <!-- .main-navigation -->
+
+                    <div class="mobile-navigation"></div>
                 </div>
-            </div>
+            </header>
+            <main class="main-content">
+                <div class="container">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Most Rated Film</h1>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Top Rated Film</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="slider">
+                                    <ul class="slides">
+                                        <li><a href="#"><img src="dummy/slide-1.jpg" alt="Slide 1"></a></li>
+                                        <li><a href="#"><img src="dummy/slide-2.jpg" alt="Slide 2"></a></li>
+                                        <li><a href="#"><img src="dummy/slide-3.jpg" alt="Slide 3"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-12">
+                                        <div class="latest-movie">
+                                            <a href="#"><img src="dummy/thumb-1.jpg" alt="Movie 1"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-12">
+                                        <div class="latest-movie">
+                                            <a href="#"><img src="dummy/thumb-2.jpg" alt="Movie 2"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- .row -->
+                        <div class="row">
+                            <h1 style="margin-left: 1%;color: black;font-style: italic;">User Based Recomendation</h1>
+                            <br>
+                            <div class="slider">
+                                <ul class="slides">
+                                    <?php $idx = 0; ?>
+                                    @for ($i = 0 ; $i< $recommendedMovieArray['cnt'] ; $i++)
+                                        <li>
+                                            <div class="col-md-9 Fcol-md-9">
+                                        @for($j = $idx; $j<(min(count($recommendedMovieArray)-1, 4)); $j++)
+                                            <div class="col-md-4 Fcol-md-4" >
+                                                <div class="latest-movie">
+                                                    <?php $url = '/details/' . $recommendedMovieArray[$j]['id']; ?>
+                                                    <a href="{{ url ($url) }}"><img src="{{ asset ($recommendedMovieArray[$j]['image']) }}" alt="Movie 3"></a>
+                                                </div>
+                                            </div>
+                                        @endfor
+                                            </div>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- .container -->
+            </main>
+            <footer class="site-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">About Us</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia tempore vitae mollitia nesciunt saepe cupiditate</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">Recent Review</h3>
+                                <ul class="no-bullet">
+                                    <li><a href="#">Lorem ipsum dolor</a></li>
+                                    <li><a href="#">Sit amet consecture</a></li>
+                                    <li><a href="#">Dolorem respequem</a></li>
+                                    <li><a href="#">Invenore veritae</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">Help Center</h3>
+                                <ul class="no-bullet">
+                                    <li><a href="#">Lorem ipsum dolor</a></li>
+                                    <li><a href="#">Sit amet consecture</a></li>
+                                    <li><a href="#">Dolorem respequem</a></li>
+                                    <li><a href="#">Invenore veritae</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">Join Us</h3>
+                                <ul class="no-bullet">
+                                    <li><a href="#">Lorem ipsum dolor</a></li>
+                                    <li><a href="#">Sit amet consecture</a></li>
+                                    <li><a href="#">Dolorem respequem</a></li>
+                                    <li><a href="#">Invenore veritae</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">Social Media</h3>
+                                <ul class="no-bullet">
+                                    <li><a href="#">Facebook</a></li>
+                                    <li><a href="#">Twitter</a></li>
+                                    <li><a href="#">Google+</a></li>
+                                    <li><a href="#">Pinterest</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="widget">
+                                <h3 class="widget-title">Newsletter</h3>
+                                <form action="#" class="subscribe-form">
+                                    <input type="text" placeholder="Email Address">
+                                </form>
+                            </div>
+                        </div>
+                    </div> <!-- .row -->
+
+                    <div class="colophon">Copyright 2014 Company name, Designed by Themezy. All rights reserved</div>
+                </div> <!-- .container -->
+
+            </footer>
         </div>
+        <!-- Default snippet for navigation -->
+        
+
+
+        <script src="{{ asset ('/js/jquery-1.11.1.min.js') }}"></script>
+        <script src="{{ asset ('/js/plugins.js') }}"></script>
+        <script src="{{ asset ('/js/app.js') }}"></script>
+        
     </body>
+
 </html>

@@ -33,6 +33,9 @@ class Controller extends BaseController
  		$nearestUser = null;
  		$biggestRate = 0;
     	foreach ($node as $key => $user) {
+    		$a = array();
+    		$b = array();
+
     		foreach ($user as $dimension) {
     			$a[] = $dimension[0];
     			$b[] = $dimension[1];
@@ -43,15 +46,14 @@ class Controller extends BaseController
     		$cosineDistance = $this->dot($a, $b) / (sqrt($this->dot($a, $a)) * sqrt($this->dot($b, $b)));
 
 			// echo $cosineDistance . " " . $key . "<br>";
-    		if($cosineDistance >= $nearestCosine && count($a) >= $biggestRate || (count($a) > $biggestRate && ($nearestCosine - $cosineDistance) <= 0.1)) {
+    		$condition1 = $cosineDistance >= $nearestCosine && count($a) >= $biggestRate;
+    		$condition2 = count($a) > $biggestRate && ($nearestCosine - $cosineDistance) <= 0.1;
+    		if($condition1 || $condition2) {
     			$nearestCosine = $cosineDistance;
     			$nearestUser = $key;
     			$biggestRate = count($a);
     			// echo "updated : " . $nearestCosine . " ". $nearestUser . "<br>";
     		}
-    		
-    		$a = array();
-    		$b = array();
     	}
 
     	return $nearestUser;
@@ -87,34 +89,61 @@ class Controller extends BaseController
 
     	$recommendedMovieObject = DB::table('movie')->whereIn('id', $recommendedMovieId)->get();
 
-    	echo "<pre>";
-    	var_dump($recommendedMovieObject);
-    	echo "</pre>";
-    	
-    	return view('welcome', ['recommendedMovieObject' => $recommendedMovieObject]);
+    	$recommendedMovieArray = array();
+    	$cnt = 0;
+    	foreach ($recommendedMovieObject as $movie) {
+    		$recommendedMovieArray[$cnt]['id'] = $movie->id;
+    		$recommendedMovieArray[$cnt]['name'] = $movie->name;
+    		$recommendedMovieArray[$cnt]['description'] = $movie->description;
+    		$recommendedMovieArray[$cnt]['image'] = $movie->image;
+    		$recommendedMovieArray[$cnt]['production_company'] = $movie->production_company;
+    		$cnt++;
+    	}
+
+		$recommendedMovieArray['cnt'] = (count($recommendedMovieArray) - 3 > 0 ? count($recommendedMovieObject) - 3 : 1);
+
+    	// echo "<pre>";
+    	// var_dump($recommendedMovieArray);
+    	// echo "</pre>";
+
+
+    	return view('welcome', ['recommendedMovieArray' => $recommendedMovieArray]);
     }
 
-    public function details($movieId, $userId)
+    public function details($movieId)
     {
+    	$userId = $this->getUser();
     	$movieObject = DB::table('movie')->find($movieId);
-    	$movieRate = DB::table('user_rate')->where('id_movie', $movieId)->where('id_user', $userId)->first()->rate;
+    	$allMovies = DB::table('user_rate')->where('id_movie', $movieId);
 
-    	$contentBasedObject = DB::table('movie')
-    							->where('production_company', $movieObject->production_company)
-    							->where('id', '!=', $movieId)
-    							->get();
+    	var_dump(count($allMovies));
 
-    	$minRate = ($movieRate - 1 < 0) ? 0 : $movieRate - 1;
-    	$maxRate = ($movieRate + 1 > 5) ? 5 : $movieRate + 1;
+  //   	$avgRate = 0;
+  //   	foreach ($allMovies as $movie) {
+  //   		$avgRate += $movie->rate;
+  //   	}
+  //   	$avgRate /= count($allMovies);
 
-    	$itemBasedCFObject = DB::table('user_rate')
-    							->where('id_movie', $movieId)
-    							->whereBetween('rate', [$minRate, $maxRate])
-    							->groupBy('id_movie')
-    							->value('id_movie');
+  //   	$contentBasedObject = DB::table('movie')
+  //   							->where('production_company', $movieObject->production_company)
+  //   							->where('id', '!=', $movieId)
+  //   							->get();
 
-    	$recommendedMovieObject = DB::table('movie')->whereIn('id', $recommendedMovieId)->get();
+  //   	$minRate = ($avgRate - 1 < 0) ? 0 : $avgRate - 1;
+  //   	$maxRate = ($avgRate + 1 > 5) ? 5 : $avgRate + 1;
 
-		return view('details', ['recommendedMovieObject' => $recommendedMovieObject, 'contentBasedObject' => $contentBasedObject]);
+  //   	$itemBasedCFObject = DB::table('user_rate')
+  //   							->where('id_movie', $movieId)
+  //   							->whereBetween('rate', [$minRate, $maxRate])
+  //   							->groupBy('id_movie')
+  //   							->value('id_movie');
+
+  //   	$recommendedMovieObject = DB::table('movie')->whereIn('id', $recommendedMovieId)->get();
+
+		// return view('details', [
+		// 	'movieObject' => $movieObject,
+		// 	'recommendedMovieObject' => $recommendedMovieObject, 
+		// 	'contentBasedObject' => $contentBasedObject
+		// ]);
     }
 }

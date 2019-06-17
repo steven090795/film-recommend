@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'Controller@firstPage')->name('homepage');
+Route::get('/details/{movieId}/', 'Controller@details')->name('details');
