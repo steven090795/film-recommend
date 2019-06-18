@@ -100,14 +100,21 @@
                                     @for ($i = 0 ; $i< $recommendedMovieArray['cnt'] ; $i++)
                                         <li>
                                             <div class="col-md-9 Fcol-md-9">
-                                        @for($j = $idx; $j<(min(count($recommendedMovieArray)-1, 4)); $j++)
-                                            <div class="col-md-4 Fcol-md-4" >
-                                                <div class="latest-movie">
-                                                    <?php $url = '/details/' . $recommendedMovieArray[$j]['id']; ?>
-                                                    <a href="{{ url ($url) }}"><img src="{{ asset ($recommendedMovieArray[$j]['image']) }}" alt="Movie 3"></a>
-                                                </div>
-                                            </div>
-                                        @endfor
+                                                @for($j = $idx; $j<(min(count($recommendedMovieArray)-1, 4)); $j++)
+                                                    <div class="col-md-4 Fcol-md-4" >
+                                                        <div class="latest-movie">
+                                                            <div class="zoom">
+                                                                <?php $url = '/details/' . $recommendedMovieArray[$j]['id']; ?>
+                                                                <a href="{{ url ($url) }}">
+                                                                    <img src="{{ asset ($recommendedMovieArray[$j]['image']) }}" alt="Movie 3">
+                                                                    <div class="middle">
+                                                                        <p class="imageText">{{ $recommendedMovieArray[$j]['name'] }}</p>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endfor
                                             </div>
                                         </li>
                                     @endfor
