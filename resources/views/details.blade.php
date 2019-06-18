@@ -27,7 +27,7 @@
         <div id="site-content">
             <header class="site-header">
                 <div class="container">
-                    <a href="index.html" id="branding">
+                    <a href="{{ '/' }}" id="branding">
                         <img src="{{ asset ('/images/logo.png') }}" alt="" class="logo">
                         <div class="logo-copy">
                             <h1 class="site-title">ubi W</h1>

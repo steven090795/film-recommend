@@ -104,15 +104,24 @@ class Controller extends BaseController
 		
 		
 		$topRatedMovie = DB::table('user_rate as ur')
-		->selectRaw('m.id,m.name,round(avg(ur.rate),2) as average_rate,m.image')	
+		->selectRaw('m.id,m.name,round(avg(ur.rate),2) as average_rate,m.image,m.imageL')	
 		->join('movie as m', 'ur.id_movie', '=', 'm.id')
 		->groupBy('m.id')
 		->orderByRaw('avg(ur.rate) desc')
 		->limit(5)
 		->get();
 
+
+		$mostRatedMovie = DB::table('user_rate as ur')
+		->selectRaw('m.id,m.name,count(ur.id) as rate_count,m.image')	
+		->join('movie as m', 'ur.id_movie', '=', 'm.id')
+		->groupBy('m.id')
+		->orderByRaw('count(ur.id) desc')
+		->limit(1)
+		->get();
+
 		// echo "<pre>";
-		// var_dump($topRatedMovie);
+		// var_dump($mostRatedMovie);
     	// echo "<pre>";
     	// var_dump($recommendedMovieArray);
     	// echo "</pre>";
@@ -120,7 +129,8 @@ class Controller extends BaseController
 
 		return view('welcome', [
 			'recommendedMovieArray' => $recommendedMovieArray,
-			'topRatedMovie' => $topRatedMovie
+			'topRatedMovie' => $topRatedMovie,
+			'mostRatedMovie' => $mostRatedMovie,
 		]);
     }
 

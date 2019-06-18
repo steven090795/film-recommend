@@ -28,7 +28,7 @@
         <div id="site-content">
             <header class="site-header">
                 <div class="container">
-                    <a href="index.html" id="branding">
+                    <a href="{{ '/' }}" id="branding">
                         <img src="{{ asset ('/images/logo.png') }}" alt="" class="logo">
                         <div class="logo-copy">
                             <h1 class="site-title">ubi W</h1>
@@ -57,7 +57,7 @@
             </header>
             <main class="main-content">
                 <div class="container">
-                    <div class="page">
+                    <div class="page slider-lan">
                         <div class="row">
                             <div class="col-md-9">
                                 <h1 style="margin-left: 1%;color: black;font-style: italic;">Top Rated Film</h1>
@@ -75,7 +75,7 @@
                                                 <?php $url = '/details/' . $movie->id; ?>
                                                 <a href="{{ url ($url) }}">
                                                     <div class="topRated">
-                                                        <img src="{{ asset($movie->image) }}" alt="Slide 1" class="slider-lan">
+                                                        <img src="{{ asset($movie->imageL) }}" alt="Slide 1">
                                                         <div class="middle">
                                                                 <p class="imageText"><strong>{{ $movie->name }}</strong>
                                                                     &nbsp;&nbsp;
@@ -93,13 +93,18 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-12">
-                                        <div class="latest-movie">
-                                            <a href="#"><img src="dummy/thumb-1.jpg" alt="Movie 1"></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-12">
-                                        <div class="latest-movie">
-                                            <a href="#"><img src="dummy/thumb-2.jpg" alt="Movie 2"></a>
+                                        <div class="latest-movie mostRated">
+                                            <div class="zoom">
+                                                <?php $url = '/details/' . $mostRatedMovie[0]->id; ?>
+                                                <a href="{{ url ($url) }}">
+                                                    <img src="{{ asset($mostRatedMovie[0]->image) }}" alt="Movie 1">
+                                                    <div class="middle">
+                                                        <p class="imageText"><strong>{{ $mostRatedMovie[0]->name }}</strong>
+                                                        </p>
+                                                        <p class="imageText"> Rated By : {{ $mostRatedMovie[0]->rate_count }} people</p>
+                                                    </div>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
