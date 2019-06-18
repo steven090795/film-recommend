@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <h1 style="margin-left: 1%;color: black;font-style: italic;">Item Based Recomendation</h1>
+                        <h1 style="margin-left: 1%;color: black;font-style: italic;">Other User also Rate (Item Based Recomendation)</h1>
                         <br>
                         <div class="slider">
                             <ul class="slides">

@@ -133,7 +133,65 @@ class Controller extends BaseController
 			'mostRatedMovie' => $mostRatedMovie,
 		]);
     }
+	public function itembase($movieId)
+	{
+		$userId=$this->getUser();
+		// $movieIRate=DB::table('movie as m')
+		// 			->selectRaw('m.id')
+		// 			->join('user_rate as ur','m.id','=','ur.id_movie')
+		// 			->where('ur.id_user', $userId)
+		// 			->get();
+		$movieIRateArray=array();
+		// foreach($movieIRate as $tmp)
+		// {
+		// 	$movieIRateArray[]=$tmp->id;
+		// }
+		$movieIRateArray[]=$movieId;
+		$userRateSame=DB::table('movie as m')
+				->selectRaw('ur.id_user')
+				->join('user_rate as ur','m.id','=','ur.id_movie')
+				->wherein('m.id', $movieIRateArray)
+				->groupBy('ur.id_user')
+				->get();
+		$userRateSameArray=array();
+		foreach($userRateSame as $tmp)
+		{
+			$userRateSameArray[]=$tmp->id_user;
+		}
 
+		//echo "<pre>";
+		// var_dump($userRateSameArray);
+		// echo "<br>";
+		// var_dump($movieIRateArray);
+		$movieRecommenedCount=DB::table('movie as m')
+				->selectRaw('m.id,m.name,m.image,m.description,m.production_company,count(m.id) cnt')
+				->join('user_rate as ur','m.id','=','ur.id_movie')
+				->whereIn('ur.id_user', $userRateSameArray)
+				->whereNotIn('m.id',$movieIRateArray)
+				->groupBy('m.id')
+				->orderByRaw('count(m.id),m.name desc')
+				->get();
+		
+
+		//var_dump($movieRecommenedCount);
+		$movieRecommenedArray=array();
+		$idx=0;
+		foreach($movieRecommenedCount as $tmp)
+		{
+			$movieRecommenedArray[$idx]['id']=$tmp->id;
+			$movieRecommenedArray[$idx]['name']=$tmp->name;
+			$movieRecommenedArray[$idx]['image']=$tmp->image;
+			$movieRecommenedArray[$idx]['description']=$tmp->description;
+			$movieRecommenedArray[$idx]['production_company']=$tmp->production_company;
+			$movieRecommenedArray[$idx]['cnt']=$tmp->cnt;//for how many people rate that film
+			$idx++;
+		}
+
+		// echo '<pre>';
+		// var_dump($movieRecommenedArray);
+		// die();
+		return $movieRecommenedArray;
+	}
     public function details($movieId)
     {
     	$userId = $this->getUser();
@@ -181,9 +239,18 @@ class Controller extends BaseController
 		$recommendedMovieArray['cnt'] = count($recommendedMovieObject)<4? 1:count($recommendedMovieObject)-3;
 		// echo "<pre>";
 		// var_dump($recommendedMovieArray);die();
+
+		// return view('details', [
+		// 	'movieObject' => $movieObject,
+		// 	'recommendedMovieArray' => $recommendedMovieArray, 
+		// 	'contentBasedObject' => $contentBasedObject,
+		// 	'avgRate' => $avgRate
+		// ]);
+		$felixItemBase=$this->itembase($movieId);
+		$felixItemBase['cnt'] = count($felixItemBase)<4? 1:count($felixItemBase)-3;
 		return view('details', [
 			'movieObject' => $movieObject,
-			'recommendedMovieArray' => $recommendedMovieArray, 
+			'recommendedMovieArray' => $felixItemBase, 
 			'contentBasedObject' => $contentBasedObject,
 			'avgRate' => $avgRate
 		]);
