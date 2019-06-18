@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public function getUser()
     {
-    	return 1;
+    	return 3;
     }
 
     public function dot($a, $b)
@@ -195,64 +195,81 @@ class Controller extends BaseController
     public function details($movieId)
     {
     	$userId = $this->getUser();
-    	$movieObject = DB::table('movie')->find($movieId);
+    	$movie = DB::table('movie')->find($movieId);
     	$allMovies = DB::table('user_rate')->where('id_movie', $movieId)->get();
 
     	$avgRate = 0;
-    	foreach ($allMovies as $movie) {
-    		$avgRate += $movie->rate;
+    	foreach ($allMovies as $movieI) {
+    		$avgRate += $movieI->rate;
 		}
-    	$avgRate /= count($allMovies);
 
-    	$contentBasedObject = DB::table('movie')
-    							->where('production_company', $movieObject->production_company)
-    							->where('id', '!=', $movieId)
-    							->get();
+    	if(count($allMovies) != 0) $avgRate /= count($allMovies);
 
-    	$minRate = ($avgRate - 1 < 0) ? 0 : $avgRate - 1;
-    	$maxRate = ($avgRate + 1 > 5) ? 5 : $avgRate + 1;
+    	$movieObject = DB::table('movie')->where('id', '!=' , $movieId)->get();
+    	$contentBasedArray = array();
 
-    	$itemBasedCFObject = DB::table('user_rate')
-    							->whereBetween('rate', [$minRate, $maxRate])
-    							->groupBy('id_movie')
-    							->having('id_movie', '!=', $movieId)
-    							->get();
-
-    	$itemBasedCFArray = array();
-    	foreach ($itemBasedCFObject as $userRate) {
-    		$itemBasedCFArray[] = $userRate->id_movie;
+    	foreach ($movieObject as $value) {
+    		for ($i = 0 ; $i < 12 ; $i++) {
+    			if ($value->genre[$i] == 1 && $movie->genre[$i] == 1) {
+    				$contentBasedArray[] = (array) $value;
+    				break;
+    			}
+    		}
     	}
 
-		$recommendedMovieObject = DB::table('movie')->whereIn('id', $itemBasedCFArray)->get();
-		$recommendedMovieArray=array();
-		$idx=0;
-		foreach ($recommendedMovieObject as $movie)
-		{
-			$recommendedMovieArray[$idx]['id'] = $movie->id;
-			
-			$recommendedMovieArray[$idx]['name'] = $movie->name;
-			$recommendedMovieArray[$idx]['description'] = $movie->description;
-			$recommendedMovieArray[$idx]['image'] = $movie->image;
-			$recommendedMovieArray[$idx]['production_company'] = $movie->production_company;
-			$idx++;
-		} 
-		$recommendedMovieArray['cnt'] = count($recommendedMovieObject)<4? 1:count($recommendedMovieObject)-3;
-		// echo "<pre>";
-		// var_dump($recommendedMovieArray);die();
+    	$contentBasedArray['cnt'] = count($contentBasedArray) < 4 ? 1 : count($contentBasedArray) - 3;
 
-		// return view('details', [
-		// 	'movieObject' => $movieObject,
-		// 	'recommendedMovieArray' => $recommendedMovieArray, 
-		// 	'contentBasedObject' => $contentBasedObject,
-		// 	'avgRate' => $avgRate
-		// ]);
-		$felixItemBase=$this->itembase($movieId);
-		$felixItemBase['cnt'] = count($felixItemBase)<4? 1:count($felixItemBase)-3;
+    	// genre
+    	$genreArray = array();
+    	for ($i = 0 ; $i < 12 ; $i++) {
+    		if($movie->genre[$i] == 1) {
+    			$genreArray[] = $i+1;
+    		}
+    	}
+
+    	$genreObject = DB::table('genre')
+    					->whereIn('id', $genreArray)
+    					->get();
+
+    	// $minRate = ($avgRate - 1 < 0) ? 0 : $avgRate - 1;
+    	// $maxRate = ($avgRate + 1 > 5) ? 5 : $avgRate + 1;
+
+    	// $itemBasedCFObject = DB::table('user_rate')
+    	// 						->whereBetween('rate', [$minRate, $maxRate])
+    	// 						->groupBy('id_movie')
+    	// 						->having('id_movie', '!=', $movieId)
+    	// 						->get();
+
+  //   	$itemBasedCFArray = array();
+  //   	foreach ($itemBasedCFObject as $userRate) {
+  //   		$itemBasedCFArray[] = $userRate->id_movie;
+  //   	}
+
+		// $recommendedMovieObject = DB::table('movie')->whereIn('id', $itemBasedCFArray)->get();
+		// $recommendedMovieArray=array();
+		// $idx=0;
+		// foreach ($recommendedMovieObject as $movie)
+		// {
+		// 	$recommendedMovieArray[$idx]['id'] = $movie->id;
+			
+		// 	$recommendedMovieArray[$idx]['name'] = $movie->name;
+		// 	$recommendedMovieArray[$idx]['description'] = $movie->description;
+		// 	$recommendedMovieArray[$idx]['image'] = $movie->image;
+		// 	$recommendedMovieArray[$idx]['production_company'] = $movie->production_company;
+		// 	$idx++;
+		// } 
+		// $recommendedMovieArray['cnt'] = count($recommendedMovieObject)<4? 1:count($recommendedMovieObject)-3;
+
+		$itemBasedCFArray=$this->itembase($movieId);
+		$itemBasedCFArray['cnt'] = count($itemBasedCFArray) < 4 ? 1 : count($itemBasedCFArray) - 3;
+
+
 		return view('details', [
-			'movieObject' => $movieObject,
-			'recommendedMovieArray' => $felixItemBase, 
-			'contentBasedObject' => $contentBasedObject,
-			'avgRate' => $avgRate
+			'movieObject' => $movie,
+			'recommendedMovieArray' => $itemBasedCFArray, 
+			'avgRate' => $avgRate,
+			'contentBasedArray' => $contentBasedArray,
+			'genreObject' => $genreObject
 		]);
 	}
 	

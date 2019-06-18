@@ -40,10 +40,10 @@
                         <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                         <ul class="menu">
                         <li class="menu-item current-menu-item"><a href="{{ '/' }}">Home</a></li>
-                            <li class="menu-item"><a href="about.html">About</a></li>
-                            <li class="menu-item"><a href="review.html">Movie reviews</a></li>
-                            <li class="menu-item"><a href="joinus.html">Join us</a></li>
-                            <li class="menu-item"><a href="contact.html">Contact</a></li>
+                            <li class="menu-item"><a href="#">About</a></li>
+                            <li class="menu-item"><a href="#">Movie reviews</a></li>
+                            <li class="menu-item"><a href="#">Join us</a></li>
+                            <li class="menu-item"><a href="#">Contact</a></li>
                         </ul> <!-- .menu -->
 
                         <form action="#" class="search-form">
