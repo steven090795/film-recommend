@@ -38,7 +38,7 @@
                     <div class="main-navigation">
                         <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                         <ul class="menu">
-                            <li class="menu-item"><a href="index.html">Home</a></li>
+                            <li class="menu-item"><a href="{{ '/' }}">Home</a></li>
                             <li class="menu-item"><a href="about.html">About</a></li>
                             <li class="menu-item current-menu-item"><a href="review.html">Movie reviews</a></li>
                             <li class="menu-item"><a href="joinus.html">Join us</a></li>
@@ -87,6 +87,35 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <h1 style="margin-left: 1%;color: black;font-style: italic;">Item Based Recomendation</h1>
+                        <br>
+                        <div class="slider">
+                            <ul class="slides">
+                                @for ($i = 0 ; $i< $recommendedMovieArray['cnt'] ; $i++)
+                                    <li>
+                                        <div class="col-md-9 Fcol-md-9">
+                                            @for($j = $i; $j<(min($i+count($recommendedMovieArray)-1,$i + 4)); $j++)
+                                                <div class="col-md-4 Fcol-md-4" >
+                                                    <div class="latest-movie">
+                                                        <div class="zoom">
+                                                            <?php $url = '/details/' . $recommendedMovieArray[$j]['id']; ?>
+                                                            <a href="{{ url ($url) }}">
+                                                                <img src="{{ asset ($recommendedMovieArray[$j]['image']) }}" alt="Movie 3">
+                                                                <div class="middle">
+                                                                    <p class="imageText">{{ $recommendedMovieArray[$j]['name'] }}</p>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                    </li>
+                                @endfor
+                            </ul>
+                        </div>
+                    </div><!-- row -->
                 </div> <!-- .container -->
             </main>
             <footer class="site-footer">

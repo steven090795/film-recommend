@@ -31,7 +31,7 @@
                     <a href="index.html" id="branding">
                         <img src="{{ asset ('/images/logo.png') }}" alt="" class="logo">
                         <div class="logo-copy">
-                            <h1 class="site-title">ubiW</h1>
+                            <h1 class="site-title">ubi W</h1>
                             <small class="site-description">Mengubah Tantangan menjadi Peluang</small>
                         </div>
                     </a> <!-- #branding -->
@@ -39,7 +39,7 @@
                     <div class="main-navigation">
                         <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                         <ul class="menu">
-                            <li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
+                        <li class="menu-item current-menu-item"><a href="{{ '/' }}">Home</a></li>
                             <li class="menu-item"><a href="about.html">About</a></li>
                             <li class="menu-item"><a href="review.html">Movie reviews</a></li>
                             <li class="menu-item"><a href="joinus.html">Join us</a></li>
@@ -60,19 +60,33 @@
                     <div class="page">
                         <div class="row">
                             <div class="col-md-9">
-                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Most Rated Film</h1>
+                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Top Rated Film</h1>
                             </div>
                             <div class="col-md-3">
-                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Top Rated Film</h1>
+                                <h1 style="margin-left: 1%;color: black;font-style: italic;">Most Rated Film</h1>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-9 content">
                                 <div class="slider">
                                     <ul class="slides">
-                                        <li><a href="#"><img src="dummy/slide-1.jpg" alt="Slide 1"></a></li>
-                                        <li><a href="#"><img src="dummy/slide-2.jpg" alt="Slide 2"></a></li>
-                                        <li><a href="#"><img src="dummy/slide-3.jpg" alt="Slide 3"></a></li>
+                                        @foreach ($topRatedMovie as $movie)
+                                            <li>
+                                                <?php $url = '/details/' . $movie->id; ?>
+                                                <a href="{{ url ($url) }}">
+                                                    <div class="topRated">
+                                                        <img src="{{ asset($movie->image) }}" alt="Slide 1" class="slider-lan">
+                                                        <div class="middle">
+                                                                <p class="imageText"><strong>{{ $movie->name }}</strong>
+                                                                    &nbsp;&nbsp;
+                                                                    <i class="fa fa-star" style="font-size:24px;color:yellow"> <strong style="color:white;">{{ $movie->average_rate }}</strong></i>
+                                                                    {{-- <p>{{ $movie->average_rate }}</p> --}}
+                                                                </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
@@ -96,11 +110,11 @@
                             <br>
                             <div class="slider">
                                 <ul class="slides">
-                                    <?php $idx = 0; ?>
+                                    
                                     @for ($i = 0 ; $i< $recommendedMovieArray['cnt'] ; $i++)
                                         <li>
                                             <div class="col-md-9 Fcol-md-9">
-                                                @for($j = $idx; $j<(min(count($recommendedMovieArray)-1, 4)); $j++)
+                                                @for($j = $i; $j<(min($i+count($recommendedMovieArray)-1, $i+4)); $j++)
                                                     <div class="col-md-4 Fcol-md-4" >
                                                         <div class="latest-movie">
                                                             <div class="zoom">
@@ -120,7 +134,7 @@
                                     @endfor
                                 </ul>
                             </div>
-                        </div>
+                        </div><!-- row -->
                     </div>
                 </div> <!-- .container -->
             </main>

@@ -101,13 +101,27 @@ class Controller extends BaseController
     	}
 
 		$recommendedMovieArray['cnt'] = (count($recommendedMovieArray) - 3 > 0 ? count($recommendedMovieObject) - 3 : 1);
+		
+		
+		$topRatedMovie = DB::table('user_rate as ur')
+		->selectRaw('m.id,m.name,round(avg(ur.rate),2) as average_rate,m.image')	
+		->join('movie as m', 'ur.id_movie', '=', 'm.id')
+		->groupBy('m.id')
+		->orderByRaw('avg(ur.rate) desc')
+		->limit(5)
+		->get();
 
+		// echo "<pre>";
+		// var_dump($topRatedMovie);
     	// echo "<pre>";
     	// var_dump($recommendedMovieArray);
     	// echo "</pre>";
 
 
-    	return view('welcome', ['recommendedMovieArray' => $recommendedMovieArray]);
+		return view('welcome', [
+			'recommendedMovieArray' => $recommendedMovieArray,
+			'topRatedMovie' => $topRatedMovie
+		]);
     }
 
     public function details($movieId)
@@ -119,7 +133,7 @@ class Controller extends BaseController
     	$avgRate = 0;
     	foreach ($allMovies as $movie) {
     		$avgRate += $movie->rate;
-    	}
+		}
     	$avgRate /= count($allMovies);
 
     	$contentBasedObject = DB::table('movie')
@@ -141,13 +155,28 @@ class Controller extends BaseController
     		$itemBasedCFArray[] = $userRate->id_movie;
     	}
 
-    	$recommendedMovieObject = DB::table('movie')->whereIn('id', $itemBasedCFArray)->get();
-
+		$recommendedMovieObject = DB::table('movie')->whereIn('id', $itemBasedCFArray)->get();
+		$recommendedMovieArray=array();
+		$idx=0;
+		foreach ($recommendedMovieObject as $movie)
+		{
+			$recommendedMovieArray[$idx]['id'] = $movie->id;
+			
+			$recommendedMovieArray[$idx]['name'] = $movie->name;
+			$recommendedMovieArray[$idx]['description'] = $movie->description;
+			$recommendedMovieArray[$idx]['image'] = $movie->image;
+			$recommendedMovieArray[$idx]['production_company'] = $movie->production_company;
+			$idx++;
+		} 
+		$recommendedMovieArray['cnt'] = count($recommendedMovieObject)<4? 1:count($recommendedMovieObject)-3;
+		// echo "<pre>";
+		// var_dump($recommendedMovieArray);die();
 		return view('details', [
 			'movieObject' => $movieObject,
-			'recommendedMovieObject' => $recommendedMovieObject, 
+			'recommendedMovieArray' => $recommendedMovieArray, 
 			'contentBasedObject' => $contentBasedObject,
 			'avgRate' => $avgRate
 		]);
-    }
+	}
+	
 }
