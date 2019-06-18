@@ -114,36 +114,40 @@ class Controller extends BaseController
     {
     	$userId = $this->getUser();
     	$movieObject = DB::table('movie')->find($movieId);
-    	$allMovies = DB::table('user_rate')->where('id_movie', $movieId);
+    	$allMovies = DB::table('user_rate')->where('id_movie', $movieId)->get();
 
-    	var_dump(count($allMovies));
+    	$avgRate = 0;
+    	foreach ($allMovies as $movie) {
+    		$avgRate += $movie->rate;
+    	}
+    	$avgRate /= count($allMovies);
 
-  //   	$avgRate = 0;
-  //   	foreach ($allMovies as $movie) {
-  //   		$avgRate += $movie->rate;
-  //   	}
-  //   	$avgRate /= count($allMovies);
+    	$contentBasedObject = DB::table('movie')
+    							->where('production_company', $movieObject->production_company)
+    							->where('id', '!=', $movieId)
+    							->get();
 
-  //   	$contentBasedObject = DB::table('movie')
-  //   							->where('production_company', $movieObject->production_company)
-  //   							->where('id', '!=', $movieId)
-  //   							->get();
+    	$minRate = ($avgRate - 1 < 0) ? 0 : $avgRate - 1;
+    	$maxRate = ($avgRate + 1 > 5) ? 5 : $avgRate + 1;
 
-  //   	$minRate = ($avgRate - 1 < 0) ? 0 : $avgRate - 1;
-  //   	$maxRate = ($avgRate + 1 > 5) ? 5 : $avgRate + 1;
+    	$itemBasedCFObject = DB::table('user_rate')
+    							->whereBetween('rate', [$minRate, $maxRate])
+    							->groupBy('id_movie')
+    							->having('id_movie', '!=', $movieId)
+    							->get();
 
-  //   	$itemBasedCFObject = DB::table('user_rate')
-  //   							->where('id_movie', $movieId)
-  //   							->whereBetween('rate', [$minRate, $maxRate])
-  //   							->groupBy('id_movie')
-  //   							->value('id_movie');
+    	$itemBasedCFArray = array();
+    	foreach ($itemBasedCFObject as $userRate) {
+    		$itemBasedCFArray[] = $userRate->id_movie;
+    	}
 
-  //   	$recommendedMovieObject = DB::table('movie')->whereIn('id', $recommendedMovieId)->get();
+    	$recommendedMovieObject = DB::table('movie')->whereIn('id', $itemBasedCFArray)->get();
 
-		// return view('details', [
-		// 	'movieObject' => $movieObject,
-		// 	'recommendedMovieObject' => $recommendedMovieObject, 
-		// 	'contentBasedObject' => $contentBasedObject
-		// ]);
+		return view('details', [
+			'movieObject' => $movieObject,
+			'recommendedMovieObject' => $recommendedMovieObject, 
+			'contentBasedObject' => $contentBasedObject,
+			'avgRate' => $avgRate
+		]);
     }
 }

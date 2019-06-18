@@ -9,10 +9,11 @@
 
         <!-- Loading third party fonts -->
         <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
-        <link href="fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="{{ asset ('/fonts/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 
         <!-- Loading main css file -->
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="{{ asset ('/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset ('/css/mycss.css') }}">
         
         <!--[if lt IE 9]>
         <script src="js/ie-support/html5.js"></script>
@@ -23,16 +24,14 @@
 
 
     <body>
-        
-
         <div id="site-content">
             <header class="site-header">
                 <div class="container">
                     <a href="index.html" id="branding">
-                        <img src="images/logo.png" alt="" class="logo">
+                        <img src="{{ asset ('/images/logo.png') }}" alt="" class="logo">
                         <div class="logo-copy">
-                            <h1 class="site-title">Company Name</h1>
-                            <small class="site-description">Tagline goes here</small>
+                            <h1 class="site-title">ubi W</h1>
+                            <small class="site-description">Mengubah Tantangan menjadi Peluang</small>
                         </div>
                     </a> <!-- #branding -->
 
@@ -49,7 +48,6 @@
                         <form action="#" class="search-form">
                             <input type="text" placeholder="Search...">
                             <button><i class="fa fa-search"></i></button>
-                        </form>n><i class="fa fa-search"></i></button>
                         </form>
                     </div> <!-- .main-navigation -->
 
@@ -60,14 +58,13 @@
                 <div class="container">
                     <div class="page">
                         <div class="breadcrumbs">
-                            <a href="index.html">Home</a>
+                            <a href="{{ '/' }}">Home</a>
                             <span>{{ $movieObject->name }}</span>
                         </div>
-
                         <div class="content">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <figure class="movie-poster"><img src="dummy/single-image.jpg" alt="#"></figure>
+                                    <figure class="movie-poster"><img src="{{ asset ($movieObject->image) }}" alt="#" class="poster"></figure>
                                 </div>
                                 <div class="col-md-6">
                                     <h2 class="movie-title">{{ $movieObject->name }}</h2>
@@ -77,23 +74,16 @@
                                         <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit sed.</p>
                                     </div>
                                     <ul class="movie-meta">
-                                        <li><strong>Rating:</strong> 
-                                            <div class="star-rating" title="Rated 4.00 out of 5"><span style="width:80%"><strong class="rating">4.00</strong> out of 5</span></div>
+                                        <li><strong>Rating:</strong>
+                                            <?php $width = ($avgRate/5 * 100); ?>
+                                            <div class="star-rating" title="Rated {{ $avgRate }} out of 5"><span style="width: {{ $width }}%"><strong class="rating">{{ $avgRate }}</strong> out of 5</span></div>
                                         </li>
-                                        <li><strong>Length:</strong> 98 min</li>
-                                        <li><strong>Premiere:</strong> 22 March 2013 (USA)</li>
-                                        <li><strong>Category:</strong> Animation/Adventure/Comedy</li>
-                                    </ul>
-
-                                    <ul class="starring">
-                                        <li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>
-                                        <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)</li>
-                                        <li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>
+                                        <li><strong>Production Company:</strong> {{ $movieObject->production_company }}</li>
                                     </ul>
                                 </div>
                             </div> <!-- .row -->
                             <div class="entry-content">
-                                {{ $movieObject->description }}
+                                <p style="text-align: justify;">{{ $movieObject->description }} </p>
                             </div>
                         </div>
                     </div>
@@ -171,9 +161,9 @@
         
 
 
-        <script src="js/jquery-1.11.1.min.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/app.js"></script>
+        <script src="{{ asset ('/js/jquery-1.11.1.min.js') }}"></script>
+        <script src="{{ asset ('/js/plugins.js') }}"></script>
+        <script src="{{ asset ('/js/app.js') }}"></script>
         
     </body>
 
